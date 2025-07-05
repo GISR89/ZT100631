@@ -1,0 +1,42 @@
+managed implementation in class zbp_tb_r_travel_0631 unique;
+strict ( 2 );
+
+define behavior for ZTB_R_TRAVEL_0631 alias Travel
+persistent table ztb_travel_0631
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) TravelID;
+  association _Booking { create; }
+}
+
+define behavior for ZTB_R_BOOKING_0631 alias Booking
+persistent table ztb_booking_0631
+lock dependent by _Travel
+authorization dependent by _Travel
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) TravelID, BookingID;
+  association _Travel;
+  association _BookingSuppl { create; }
+}
+
+define behavior for ZTB_R_BOOKSUPP_631 alias Supplements
+//persistent table ztb_booksupp_631
+with unmanaged save
+lock dependent by _Travel
+authorization dependent by _Travel
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) TravelID, BookingID, BookingSupplementID;
+  association _Travel;
+  association _Booking;
+}

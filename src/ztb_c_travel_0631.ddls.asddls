@@ -43,6 +43,9 @@ define root view entity ZTB_C_TRAVEL_0631
       Description,
       
       @ObjectModel.text.element: [ 'OverallStatusText' ]
+      @Consumption.valueHelpDefinition: [{ entity : { name:    '/DMO/I_Overall_Status_VH' ,
+                                                      element: 'OverallStatus' } ,
+                                           useForValidation: true }]
       OverallStatus,
       _OverallStatus._Text.Text as OverallStatusText : localized,
 
@@ -54,7 +57,7 @@ define root view entity ZTB_C_TRAVEL_0631
 
       /* Associations */
       _Agency,
-      _Booking,
+      _Booking : redirected to composition child ZTB_C_BOOKING_0631,
       _Currency,
       _Customer,
       _OverallStatus

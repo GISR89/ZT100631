@@ -1,0 +1,78 @@
+@Metadata.layer: #CORE
+
+@UI: { headerInfo: { typeName:       'Travel',
+                     typeNamePlural: 'Travels',
+                     title: { type:  #STANDARD,
+                              value: 'TravelID' } },
+       presentationVariant: [{ sortOrder: [{ by:       'TravelID',
+                                             direction: #DESC }],
+                               visualizations: [{ type: #AS_LINEITEM }] }] }
+
+annotate entity ZTB_C_TRAVEL_0631 with
+{
+
+  @UI.facet: [{ id:    'Travel',
+                label: 'Travel',
+                type: #IDENTIFICATION_REFERENCE,
+                position: 10 },
+
+              { id: 'Booking',
+                label: 'Booking',
+                type: #LINEITEM_REFERENCE,
+                position: 20,
+                targetElement: '_Booking' } ]
+
+  @UI: { lineItem: [{ position: 10, importance: #HIGH }],
+         identification: [{ position: 10 }],
+         selectionField: [{ position: 10 }] }
+  TravelID;
+
+  @UI: { lineItem: [{ position: 20, importance: #HIGH }],
+         identification: [{ position: 20 }],
+         selectionField: [{ position: 20 }] }
+  AgencyID;
+
+  @UI: { lineItem: [{ position: 30, importance: #HIGH }],
+         identification: [{ position: 30 }],
+         selectionField: [{ position: 30 }] }
+  CustomerID;
+
+  @UI: { lineItem: [{ position: 40, importance: #MEDIUM }],
+         identification: [{ position: 40 }] }
+  BeginDate;
+
+  @UI: { lineItem: [{ position: 50, importance: #MEDIUM }],
+         identification: [{ position: 50 }] }
+  EndDate;
+
+  @UI: { lineItem: [{ position: 60, importance: #HIGH }],
+         identification: [{ position: 60 }] }
+  BookingFee;
+
+  @UI: { lineItem: [{ position: 70, importance: #HIGH }],
+         identification: [{ position: 70 }] }
+  TotalPrice;
+
+  @UI: { lineItem: [{ position: 80, importance: #MEDIUM }],
+         identification: [{ position: 80 }] }
+  Description;
+
+  @UI: { lineItem: [{ position: 90, importance: #MEDIUM }],
+         identification: [{ position: 90, label: 'Status' }],
+         selectionField: [{ position: 40 }],
+         textArrangement: #TEXT_ONLY }
+  OverallStatusText;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+
+
+}

@@ -1,0 +1,28 @@
+interface;
+
+define behavior for ZTB_I_TRAVEL_0631 alias Travel
+{
+  use create;
+  use update;
+  use delete;
+
+  use association _Booking { create; }
+}
+
+define behavior for ZTB_I_BOOKING_0631 alias Booking
+{
+  use update;
+  use delete;
+
+  use association _Travel;
+  use association _BookingSuppl { create; }
+}
+
+define behavior for ZTB_I_BOOKSUPP_631 alias Supplements
+{
+  use update;
+  use delete;
+
+  use association _Travel;
+  use association _Booking;
+}
