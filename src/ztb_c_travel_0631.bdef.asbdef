@@ -1,0 +1,33 @@
+projection;
+strict ( 2 );
+
+define behavior for ZTB_C_TRAVEL_0631 alias Travel
+{
+  use create;
+  use update;
+  use delete;
+
+  use action acceptTravel;
+  use action rejectTravel;
+  use action createTravelByTemplate;
+
+  use association _Booking { create; }
+}
+
+define behavior for ZTB_C_BOOKING_0631 alias Booking
+{
+  use update;
+  use delete;
+
+  use association _Travel;
+  use association _BookingSuppl { create; }
+}
+
+define behavior for ZTB_C_BOOKSUPP_631 alias Supplements
+{
+  use update;
+  use delete;
+
+  use association _Travel;
+  use association _Booking;
+}

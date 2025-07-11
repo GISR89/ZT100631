@@ -1,6 +1,12 @@
 @EndUserText.label: 'Travel'
 define service ZTB_SD_TRAVEL_0631 {
-  expose ZTB_C_TRAVEL_0631  as Travel;
-  expose ZTB_C_BOOKING_0631 as Booking;
-  expose ZTB_C_BOOKSUPP_631 as BookingSupplements;
+  expose ZTB_C_TRAVEL_0631     as Travel;
+  expose ZTB_C_BOOKING_0631    as Booking;
+  expose ZTB_C_BOOKSUPP_631    as BookingSupplements;
+  expose /DMO/I_Supplement     as Supplement;
+  expose /DMO/I_SupplementText as SupplementTex;
+  expose /DMO/I_Customer       as Passenger;
+  expose /DMO/I_Agency         as TravelAgency;
+  expose /DMO/I_Carrier        as Airline;
+  expose /DMO/I_Connection     as FlightConnection;
 }
