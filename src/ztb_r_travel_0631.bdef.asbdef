@@ -1,10 +1,11 @@
 managed implementation in class zbp_tb_r_travel_0631 unique;
-strict ( 2 );
+strict ( 2 ) ;
 
 define behavior for ZTB_R_TRAVEL_0631 alias Travel
 persistent table ztb_travel_0631
+with additional save
 lock master
-authorization master ( instance )
+authorization master ( instance, global  )
 etag master LocalLastChangedAt
 {
 
@@ -12,9 +13,9 @@ etag master LocalLastChangedAt
   update;
   delete;
 
-  field ( readonly ) TravelID, LocalLastChangedAt, LastChangedAt, LastChangedBy, CreatedAt, CreatedBy;
-  field ( mandatory ) AgencyID, OverallStatus, BookingFee, CurrencyCode;
-  field ( features : instance ) BookingFee;
+  field ( readonly ) LocalLastChangedAt, LastChangedAt, LastChangedBy, CreatedAt, CreatedBy;
+  field ( mandatory : create) TravelID, AgencyID, OverallStatus, BookingFee, CurrencyCode;
+  field ( features : instance ) OverallStatus;
 
   validation validateCustomer on save { field CustomerID; }
   validation validateDates on save { field BeginDate, EndDate; }
@@ -57,15 +58,15 @@ etag master LocalLastChangedAt
   update;
   delete;
 
-  field ( readonly ) TravelID, BookingID;
-  field ( mandatory ) AirlineID, ConnectionId, FlightDate, BookingStatus;
+  field ( readonly ) TravelID;
+  field ( mandatory: create ) BookingID, AirlineID, ConnectionId, FlightDate, BookingStatus;
 
   validation validateStatus on save { field BookingStatus; }
 
   determination calculateTotalFlightPrice on modify { field FlightPrice , CurrencyCode; }
 
   association _Travel;
-  association _BookingSuppl { create; }
+  association _BookingSuppl { create ;  }
 
   mapping for ztb_booking_0631
     {
