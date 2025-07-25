@@ -54,6 +54,12 @@ define root view entity ZTB_C_TRAVEL_0631
       LastChangedBy,
       LocalLastChangedAt,
       LastChangedAt,
+      
+      /*Virtual Element*/ 
+      @Semantics.amount.currencyCode: 'CurrencyCode' 
+      @ObjectModel.virtualElementCalculatedBy: 'ABAP:ZCL_VIRT_ELEM_0631' 
+      virtual DiscountPrice : /dmo/total_price, 
+      
 
       /* Associations */
       _Agency,

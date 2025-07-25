@@ -83,10 +83,10 @@ annotate entity ZTB_C_TRAVEL_0631 with
          selectionField: [{ position: 40 }],
          textArrangement: #TEXT_ONLY }          
   OverallStatus;
-//  @UI: { lineItem: [{ position: 100, importance: #MEDIUM }],
-//         identification: [{ position: 100, label: 'Status' }],
-//         selectionField: [{ position: 40 }] }
-//  OverallStatus;
+  
+  @UI: { lineItem: [{ position: 100, importance: #HIGH }] }
+  @EndUserText.label: 'Discount 10%'
+  DiscountPrice;
 
   @UI.hidden: true
   CreatedBy;
