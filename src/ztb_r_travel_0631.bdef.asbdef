@@ -96,9 +96,9 @@ etag master LocalLastChangedAt
   update;
   delete;
 
-  field ( readonly ) TravelID, BookingID, BookingSupplementID;
+  field ( readonly ) TravelID, BookingID ;
 
-  field ( mandatory ) SupplementID, Price;
+  field ( mandatory ) BookingSupplementID, SupplementID, Price;
 
   determination calculateTotalSupplimPrice on modify { field Price , CurrencyCode; }
 
