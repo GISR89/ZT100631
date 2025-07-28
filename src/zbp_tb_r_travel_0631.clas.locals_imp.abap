@@ -397,9 +397,9 @@ ENDCLASS.
 CLASS lsc_ZTB_R_TRAVEL_0631 DEFINITION INHERITING FROM cl_abap_behavior_saver.
 
   PUBLIC SECTION.
-    CONSTANTS: create TYPE string VALUE 'CREATE',
-               update TYPE string VALUE 'UPDATE',
-               delete TYPE string VALUE 'DELETE'.
+    CONSTANTS: create TYPE string VALUE 'C',
+               update TYPE string VALUE 'U',
+               delete TYPE string VALUE 'D'.
 
   PROTECTED SECTION.
 
@@ -407,12 +407,15 @@ CLASS lsc_ZTB_R_TRAVEL_0631 DEFINITION INHERITING FROM cl_abap_behavior_saver.
 
     METHODS cleanup_finalize REDEFINITION.
 
+
 ENDCLASS.
 
 CLASS lsc_ZTB_R_TRAVEL_0631 IMPLEMENTATION.
 
   METHOD save_modified.
 
+
+**********************************************************************
     DATA: lt_travel_log   TYPE STANDARD TABLE OF ztb_log_0631,
           lt_travel_log_u TYPE STANDARD TABLE OF ztb_log_0631.
 
@@ -458,10 +461,10 @@ CLASS lsc_ZTB_R_TRAVEL_0631 IMPLEMENTATION.
         GET TIME STAMP FIELD <ls_travel_log_up>-created_at.
         <ls_travel_log_up>-changing_operation = lsc_ZTB_R_TRAVEL_0631=>update.
 
-        IF ls_update_travel-%control-CustomerID EQ  cl_abap_behv=>flag_changed or
-           ls_update_travel-%control-AgencyID EQ  cl_abap_behv=>flag_changed or
-           ls_update_travel-%control-OverallStatus EQ  cl_abap_behv=>flag_changed or
-           ls_update_travel-%control-BookingFee EQ  cl_abap_behv=>flag_changed or
+        IF ls_update_travel-%control-CustomerID EQ  cl_abap_behv=>flag_changed OR
+           ls_update_travel-%control-AgencyID EQ  cl_abap_behv=>flag_changed OR
+           ls_update_travel-%control-OverallStatus EQ  cl_abap_behv=>flag_changed OR
+           ls_update_travel-%control-BookingFee EQ  cl_abap_behv=>flag_changed OR
 
           <ls_travel_log_up>-changed_field_name = 'CustomerID'.
           <ls_travel_log_up>-changed_value      = ls_update_travel-CustomerID.
@@ -496,9 +499,75 @@ CLASS lsc_ZTB_R_TRAVEL_0631 IMPLEMENTATION.
       INSERT ztb_log_0631 FROM TABLE @lt_travel_log_u.
     ENDIF.
 
+**********************************************************************
+    DATA:lt_supplements TYPE STANDARD TABLE OF ztb_booksupp_631,
+         lv_op_type     TYPE zde_flag_0631,
+         lv_update      TYPE zde_flag_0631.
+
+    IF NOT create-supplements IS INITIAL.
+
+       LOOP AT create-supplements INTO DATA(ls_supplements).
+        APPEND INITIAL LINE TO lt_supplements ASSIGNING FIELD-SYMBOL(<fs_supplements>).
+        <fs_supplements>-travel_id  = ls_supplements-TravelID.
+        <fs_supplements>-booking_id = ls_supplements-BookingID.
+        <fs_supplements>-supplement_id = ls_supplements-SupplementID.
+        <fs_supplements>-price = ls_supplements-Price.
+        <fs_supplements>-currency_code = ls_supplements-CurrencyCode.
+        <fs_supplements>-local_last_changed_at = ls_supplements-LocalLastChangedAt.
+      ENDLOOP.
+
+      lv_op_type = lsc_ztb_r_travel_0631=>create.
+    ENDIF.
+
+    IF NOT update-supplements IS INITIAL.
+
+      LOOP AT update-supplements INTO ls_supplements.
+        APPEND INITIAL LINE TO lt_supplements ASSIGNING <fs_supplements>.
+        <fs_supplements>-travel_id  = ls_supplements-TravelID.
+        <fs_supplements>-booking_id = ls_supplements-BookingID.
+        <fs_supplements>-supplement_id = ls_supplements-SupplementID.
+        <fs_supplements>-price = ls_supplements-Price.
+        <fs_supplements>-currency_code = ls_supplements-CurrencyCode.
+        <fs_supplements>-local_last_changed_at = ls_supplements-LocalLastChangedAt.
+      ENDLOOP.
+
+      " lt_supplements = CORRESPONDING #( create-supplements ).
+      lv_op_type = lsc_ztb_r_travel_0631=>update.
+    ENDIF.
+
+    IF NOT delete-supplements IS INITIAL.
+
+         LOOP AT delete-supplements INTO data(ls_supplements_del).
+        APPEND INITIAL LINE TO lt_supplements ASSIGNING FIELD-SYMBOL(<fs_supplements2>).
+        <fs_supplements2>-travel_id  = ls_supplements_del-TravelID.
+        <fs_supplements2>-booking_id = ls_supplements_del-BookingID.
+        <fs_supplements2>-supplement_id = ls_supplements_del-BookingSupplementID.
+
+      ENDLOOP.
+
+      "lt_supplements = CORRESPONDING #( create-supplements ).
+      lv_op_type = lsc_ztb_r_travel_0631=>delete.
+    ENDIF.
+
+    IF NOT lt_supplements IS INITIAL.
+
+      CALL FUNCTION 'Z_SUPPL_0631'
+        EXPORTING
+          it_supplements = lt_supplements
+          iv_op_type     = lv_op_type
+        IMPORTING
+          ev_updated     = lv_update.
+
+*  if lv_update eq abap_true.
+*    reported-supplements[ 1 ]-%msg "para mensajes
+*  endif.
+
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD cleanup_finalize.
   ENDMETHOD.
+
 
 ENDCLASS.
